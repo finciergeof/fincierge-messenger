@@ -30,7 +30,7 @@ on:
 
 concurrency:
   group: fincierge-win-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   ARCH: x64
