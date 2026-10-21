@@ -16,52 +16,6 @@ struct StringEntry {
 	const char *en;
 	const char *ru;
 	const char *uk;
-	// Reminders.
-	{ "remind_me",
-		"Remind me...",
-		"Напомнить...",
-		"Нагадати..." },
-	{ "remind_title",
-		"Remind me about this message",
-		"Напомнить об этом сообщении",
-		"Нагадати про це повідомлення" },
-	{ "remind_button",
-		"Remind",
-		"Напомнить",
-		"Нагадати" },
-	{ "remind_about",
-		"At this time the message will arrive in your Saved Messages "
-		"with a notification - even if this app is closed.",
-		"В это время сообщение придёт в «Избранное» с уведомлением — "
-		"даже если приложение закрыто.",
-		"У цей час повідомлення прийде в «Збережене» зі сповіщенням — "
-		"навіть якщо застосунок закрито." },
-	{ "remind_done",
-		"Reminder set. It will arrive in Saved Messages.",
-		"Напоминание создано. Оно придёт в «Избранное».",
-		"Нагадування створено. Воно прийде в «Збережене»." },
-
-	// Chat notes.
-	{ "note_add",
-		"Add note",
-		"Добавить заметку",
-		"Додати нотатку" },
-	{ "note_edit",
-		"Edit note",
-		"Изменить заметку",
-		"Змінити нотатку" },
-	{ "note_title",
-		"Note",
-		"Заметка",
-		"Нотатка" },
-	{ "note_placeholder",
-		"Only you can see it, on this device",
-		"Видна только вам, на этом устройстве",
-		"Бачите лише ви, на цьому пристрої" },
-	{ "note_label",
-		"Your note",
-		"Ваша заметка",
-		"Ваша нотатка" },
 };
 
 inline constexpr StringEntry kStrings[] = {
@@ -108,6 +62,53 @@ inline constexpr StringEntry kStrings[] = {
 		"Mark as read for everyone",
 		"Прочитать для всех",
 		"Прочитати для всіх" },
+
+	// Reminders.
+	{ "remind_me",
+		"Remind me...",
+		"Напомнить...",
+		"Нагадати..." },
+	{ "remind_title",
+		"Remind me about this message",
+		"Напомнить об этом сообщении",
+		"Нагадати про це повідомлення" },
+	{ "remind_button",
+		"Remind",
+		"Напомнить",
+		"Нагадати" },
+	{ "remind_about",
+		"At this time the message will arrive in your Saved Messages "
+		"with a notification - even if this app is closed.",
+		"В это время сообщение придёт в «Избранное» с уведомлением — "
+		"даже если приложение закрыто.",
+		"У цей час повідомлення прийде в «Збережене» зі сповіщенням — "
+		"навіть якщо застосунок закрито." },
+	{ "remind_done",
+		"Reminder set. It will arrive in Saved Messages.",
+		"Напоминание создано. Оно придёт в «Избранное».",
+		"Нагадування створено. Воно прийде в «Збережене»." },
+
+	// Chat notes.
+	{ "note_add",
+		"Add note",
+		"Добавить заметку",
+		"Додати нотатку" },
+	{ "note_edit",
+		"Edit note",
+		"Изменить заметку",
+		"Змінити нотатку" },
+	{ "note_title",
+		"Note",
+		"Заметка",
+		"Нотатка" },
+	{ "note_placeholder",
+		"Only you can see it, on this device",
+		"Видна только вам, на этом устройстве",
+		"Бачите лише ви, на цьому пристрої" },
+	{ "note_label",
+		"Your note",
+		"Ваша заметка",
+		"Ваша нотатка" },
 };
 
 } // namespace Fincierge
