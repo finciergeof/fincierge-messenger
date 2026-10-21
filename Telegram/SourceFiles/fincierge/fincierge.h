@@ -8,6 +8,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #pragma once
 
 class History;
+class HistoryItem;
 class PeerData;
 
 namespace Fincierge {
@@ -31,5 +32,12 @@ void SetStringOption(const QString &key, const QString &value);
 
 // Ghost read is on, but the user explicitly asked to mark this chat.
 void MarkReadOnServer(not_null<History*> history);
+
+// Keep messages that others deleted (until restart), marked as deleted.
+[[nodiscard]] bool KeepDeleted();
+[[nodiscard]] bool IsKeptDeleted(not_null<const HistoryItem*> item);
+// Returns the items that should really be destroyed.
+[[nodiscard]] std::vector<not_null<HistoryItem*>> KeepDeletedItems(
+	std::vector<not_null<HistoryItem*>> items);
 
 } // namespace Fincierge

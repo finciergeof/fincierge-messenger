@@ -60,6 +60,7 @@ void SetupSettings(
 	)->addClickHandler([=] {
 		EditTemplates(controller);
 	});
+	AddToggle(container, "keep_deleted", u"keep_deleted"_q);
 	Ui::AddSkip(container);
 	Ui::AddDividerText(container, TrValue("messages_about"));
 }

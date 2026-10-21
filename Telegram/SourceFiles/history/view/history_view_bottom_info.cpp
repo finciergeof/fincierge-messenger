@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "history/view/history_view_bottom_info.h"
+#include "fincierge/fincierge.h"
 
 #include "ui/chat/message_bubble.h"
 #include "ui/chat/chat_style.h"
@@ -750,6 +751,9 @@ BottomInfo::Data BottomInfoDataFromMessage(not_null<Message*> message) {
 	if (GetEnhancedBool("show_messages_id")) {
 		if (item->fullId().msg > 0)
 			result.msgId = QString(" (%1)").arg(item->fullId().msg.bare);
+	}
+	if (Fincierge::IsKeptDeleted(item)) {
+		result.msgId += u" \u00B7 "_q + Fincierge::Tr("deleted_mark");
 	}
 	if (!forwarded) {
 		return result;

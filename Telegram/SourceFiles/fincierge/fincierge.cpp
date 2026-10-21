@@ -18,6 +18,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "data/data_channel.h"
 #include "main/main_session.h"
 #include "apiwrap.h"
+#include "data/data_session.h"
 #include "settings.h"
 
 namespace Fincierge {
@@ -35,6 +36,11 @@ namespace {
 		return 1;
 	}
 	return 0;
+}
+
+[[nodiscard]] base::flat_set<FullMsgId> &KeptDeleted() {
+	static auto result = base::flat_set<FullMsgId>();
+	return result;
 }
 
 } // namespace
@@ -113,6 +119,32 @@ void MarkReadOnServer(not_null<History*> history) {
 			peer->session().api().applyAffectedMessages(peer, result);
 		}).send();
 	}
+}
+
+bool KeepDeleted() {
+	return Option(u"keep_deleted"_q);
+}
+
+bool IsKeptDeleted(not_null<const HistoryItem*> item) {
+	const auto &kept = KeptDeleted();
+	return !kept.empty() && kept.contains(item->fullId());
+}
+
+std::vector<not_null<HistoryItem*>> KeepDeletedItems(
+		std::vector<not_null<HistoryItem*>> items) {
+	if (!KeepDeleted()) {
+		return items;
+	}
+	auto result = std::vector<not_null<HistoryItem*>>();
+	for (const auto &item : items) {
+		if (item->isRegular() && !item->isService()) {
+			KeptDeleted().emplace(item->fullId());
+			item->history()->owner().requestItemViewRefresh(item);
+		} else {
+			result.push_back(item);
+		}
+	}
+	return result;
 }
 
 } // namespace Fincierge

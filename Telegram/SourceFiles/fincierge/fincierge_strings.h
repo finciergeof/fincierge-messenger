@@ -126,13 +126,26 @@ inline constexpr StringEntry kStrings[] = {
 	{ "messages_about",
 		"Templates appear when you right-click the message field. "
 		"\"Remind me...\" is in the message menu, chat notes are in the "
-		"chat menu in the chat list.",
+		"chat menu in the chat list. Deleted messages are kept only "
+		"while the app is running.",
 		"Шаблоны появляются по правому клику в поле ввода. "
 		"«Напомнить...» — в меню сообщения, заметки — в меню чата "
-		"в списке чатов.",
+		"в списке чатов. Удалённые сообщения хранятся, пока "
+		"приложение открыто.",
 		"Шаблони з'являються за правим кліком у полі введення. "
 		"«Нагадати...» — у меню повідомлення, нотатки — у меню чату "
-		"в списку чатів." },
+		"в списку чатів. Видалені повідомлення зберігаються, поки "
+		"застосунок відкритий." },
+
+	// Deleted messages.
+	{ "keep_deleted",
+		"Keep deleted messages",
+		"Сохранять удалённые сообщения",
+		"Зберігати видалені повідомлення" },
+	{ "deleted_mark",
+		"deleted",
+		"удалено",
+		"видалено" },
 };
 
 } // namespace Fincierge
