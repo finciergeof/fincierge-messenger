@@ -1,0 +1,231 @@
+name: Fincierge Messenger (Windows x64)
+
+# How this works:
+#  1. "libraries" builds Qt, ffmpeg and the other dependencies once and keeps
+#     them in the Actions cache. The very first run may not fit into one job
+#     (6 hour limit); in that case it saves what it managed to build and fails
+#     with a message - just press "Re-run all jobs" and it will continue.
+#  2. "app" builds the messenger itself (Release) and packs the installer.
+#
+# Secrets (Settings -> Secrets and variables -> Actions):
+#   API_ID, API_HASH - from https://my.telegram.org (API development tools).
+#   Without them the public test credentials are used.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+    tags: ['v*']
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - 'LEGAL'
+      - 'LICENSE'
+      - '.github/upstream-workflows/**'
+      - 'snap/**'
+      - 'lib/xdg/**'
+      - 'Telegram/build/docker/**'
+      - 'Telegram/SourceFiles/platform/linux/**'
+      - 'Telegram/SourceFiles/platform/mac/**'
+
+concurrency:
+  group: fincierge-win-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ARCH: x64
+  QT_OPT: qt6
+
+jobs:
+  libraries:
+    name: Libraries
+    runs-on: windows-latest
+    timeout-minutes: 355
+    outputs:
+      cache_key: ${{ steps.state.outputs.key }}
+    defaults:
+      run:
+        shell: cmd
+    steps:
+      - name: Prepare directories
+        run: |
+          mkdir %userprofile%\TBuild\Libraries
+          mklink /d %GITHUB_WORKSPACE%\TBuild %userprofile%\TBuild
+          echo TBUILD=%GITHUB_WORKSPACE%\TBuild>>%GITHUB_ENV%
+          echo LibrariesPath=%GITHUB_WORKSPACE%\TBuild\Libraries\win64>>%GITHUB_ENV%
+
+      - name: Clone
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: TBuild\tdesktop
+
+      - name: First set up
+        shell: bash
+        run: |
+          DOCPATH=$TBUILD/tdesktop/docs/building-win.md
+          SDK="$(grep "SDK version" $DOCPATH | sed -r 's/.*\*\*(.*)\*\* SDK version.*/\1/')"
+          echo "SDK=$SDK" >> $GITHUB_ENV
+          sed -i '/CMAKE_${lang}_FLAGS_DEBUG_INIT/s/${_Zi}//' "$PROGRAMFILES"/CMake/share/cmake*/Modules/Platform/Windows-MSVC.cmake
+          PREFIX="win64-qt6-libs-v1-$(cat $TBUILD/tdesktop/Telegram/build/prepare/prepare.py <(echo $SDK) | sha256sum | cut -c1-16)"
+          echo "CACHE_PREFIX=$PREFIX" >> $GITHUB_ENV
+          git config --global user.email "build@fincierge.local"
+          git config --global user.name "Fincierge Build"
+
+      - uses: Eden-CI/msvc-dev-cmd@master
+        with:
+          arch: x64
+          sdk: ${{ env.SDK }}
+          toolset: '14.44'
+
+      - name: NuGet sources
+        run: |
+          nuget sources Disable -Name "Microsoft Visual Studio Offline Packages"
+          nuget sources Add -Source https://api.nuget.org/v3/index.json & exit 0
+
+      - name: Restore libraries
+        id: restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            TBuild\ThirdParty
+            TBuild\Libraries
+          key: ${{ env.CACHE_PREFIX }}-none
+          restore-keys: ${{ env.CACHE_PREFIX }}-
+
+      - name: Build libraries
+        id: prepare
+        timeout-minutes: 290
+        continue-on-error: true
+        run: |
+          %TBUILD%\tdesktop\Telegram\build\prepare\win.bat silent qt6
+
+      - name: Free up disk space
+        if: always()
+        shell: bash
+        run: find $LibrariesPath '(' '(' ! '(' -name '*.lib' -o -name '*.a' -o -name '*.exe' -o -name '*.h' -o -name '*.hpp' -o -name '*.inc' -o -name '*.cmake' -o -name '*.pc' -o -path '*/include/*' -o -path '*/objects-*' -o -path '*/cache_keys/*' -o -path '*/patches/*' -o -path '*/nv-codec-headers/*' ')' -type f ')' -o -empty ')' -delete || true
+
+      - name: Compute cache state
+        id: state
+        if: always()
+        shell: bash
+        run: |
+          STATE=$( (cd $TBUILD; find ThirdParty/cache_keys Libraries/win64/cache_keys -type f 2>/dev/null | sort | xargs cat 2>/dev/null) | sha256sum | cut -c1-16)
+          echo "key=$CACHE_PREFIX-$STATE" >> $GITHUB_OUTPUT
+
+      - name: Save libraries
+        if: always() && steps.state.outputs.key != steps.restore.outputs.cache-matched-key
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            TBuild\ThirdParty
+            TBuild\Libraries
+          key: ${{ steps.state.outputs.key }}
+
+      - name: Need another run?
+        if: steps.prepare.outcome != 'success'
+        shell: bash
+        run: |
+          echo "::error::Libraries are not finished yet (first build is long). Progress is saved - press 'Re-run all jobs'."
+          exit 1
+
+  app:
+    name: Messenger
+    needs: libraries
+    runs-on: windows-latest
+    timeout-minutes: 355
+    defaults:
+      run:
+        shell: cmd
+    steps:
+      - name: Prepare directories
+        run: |
+          mkdir %userprofile%\TBuild\Libraries
+          mklink /d %GITHUB_WORKSPACE%\TBuild %userprofile%\TBuild
+          echo TBUILD=%GITHUB_WORKSPACE%\TBuild>>%GITHUB_ENV%
+
+      - name: Clone
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: TBuild\tdesktop
+
+      - name: First set up
+        shell: bash
+        run: |
+          DOCPATH=$TBUILD/tdesktop/docs/building-win.md
+          SDK="$(grep "SDK version" $DOCPATH | sed -r 's/.*\*\*(.*)\*\* SDK version.*/\1/')"
+          echo "SDK=$SDK" >> $GITHUB_ENV
+          VERSION="$(sed -n 's/^AppVersionStrSmall *//p' $TBUILD/tdesktop/Telegram/build/version | tr -d '\r\n\xef\xbb\xbf')"
+          FULL="$(sed -n 's/^AppVersionStr  *//p' $TBUILD/tdesktop/Telegram/build/version | tr -d '\r\n\xef\xbb\xbf')"
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "APP_VERSION_FULL=$FULL" >> $GITHUB_ENV
+
+      - uses: Eden-CI/msvc-dev-cmd@master
+        with:
+          arch: x64
+          sdk: ${{ env.SDK }}
+          toolset: '14.44'
+
+      - name: Restore libraries
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            TBuild\ThirdParty
+            TBuild\Libraries
+          key: ${{ needs.libraries.outputs.cache_key }}
+          fail-on-cache-miss: true
+
+      - name: Configure
+        env:
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+        run: |
+          cd %TBUILD%\tdesktop\Telegram
+          if "%API_ID%"=="" (
+            set "API=-D TDESKTOP_API_TEST=ON"
+          ) else (
+            set "API=-D TDESKTOP_API_ID=%API_ID% -D TDESKTOP_API_HASH=%API_HASH%"
+          )
+          call configure.bat x64 qt6 %API% ^
+            -D CMAKE_CONFIGURATION_TYPES=Release ^
+            -D DESKTOP_APP_DISABLE_AUTOUPDATE=ON ^
+            -D DESKTOP_APP_DISABLE_CRASH_REPORTS=ON ^
+            -D DESKTOP_APP_ENABLE_LTO=OFF
+
+      - name: Build
+        run: |
+          cd %TBUILD%\tdesktop
+          cmake --build out --config Release --parallel --target Telegram
+
+      - name: Installer
+        shell: pwsh
+        run: |
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue)) {
+            $inno = "${env:ProgramFiles(x86)}\Inno Setup 6"
+            if (-not (Test-Path "$inno\ISCC.exe")) { choco install innosetup -y --no-progress | Out-Null }
+            $env:PATH = "$inno;$env:PATH"
+          }
+          $out = "$env:TBUILD\tdesktop\out\Release"
+          iscc "/dMyAppVersion=$env:APP_VERSION" "/dMyAppVersionZero=$env:APP_VERSION_FULL" "/dMyAppVersionFull=$env:APP_VERSION_FULL" "/dReleasePath=$out" "/dMyBuildTarget=win64" "$env:TBUILD\tdesktop\Telegram\build\setup.iss"
+          New-Item -ItemType Directory -Force -Path dist\portable | Out-Null
+          Copy-Item "$out\Telegram.exe" "dist\portable\Fincierge Messenger.exe"
+          Copy-Item -Recurse "$out\modules" dist\portable\modules
+          Compress-Archive -Path dist\portable\* -DestinationPath "dist\Fincierge-Messenger-portable-$env:APP_VERSION_FULL.zip"
+          Copy-Item "$out\Fincierge-Messenger-x64.*.exe" dist\
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fincierge-Messenger-${{ env.APP_VERSION_FULL }}
+          path: |
+            dist\*.exe
+            dist\*.zip
+          retention-days: 14
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.exe
+            dist/*.zip

@@ -18,10 +18,10 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #endif // TDESKTOP_ALLOW_CLOSED_ALPHA
 
 // used in Updater.cpp and Setup.iss for Windows
-constexpr auto AppId = "{9DB6C981-7FD2-41B5-AEF2-20C933FD3F21}"_cs;
+constexpr auto AppId = "{0A78DD7C-2EF2-4281-B43E-B79E1ED4F507}"_cs;
 constexpr auto AppNameOld = "Telegram Win (Unofficial)"_cs;
-constexpr auto AppName = "64Gram Desktop"_cs;
-constexpr auto AppFile = "64Gram"_cs;
+constexpr auto AppName = "Fincierge Messenger"_cs;
+constexpr auto AppFile = "Fincierge"_cs;
 constexpr auto AppVersion = 1002010;
 constexpr auto AppVersionStr = "1.2.10";
 constexpr auto AppBetaVersion = false;

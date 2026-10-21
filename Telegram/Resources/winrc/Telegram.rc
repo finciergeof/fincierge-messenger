@@ -60,11 +60,11 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "64Gram"
-            VALUE "FileDescription", "64Gram Desktop"
+            VALUE "CompanyName", "Fincierge"
+            VALUE "FileDescription", "Fincierge Messenger"
             VALUE "FileVersion", "1.2.10.0"
             VALUE "LegalCopyright", "Copyright (C) 2014-2022"
-            VALUE "ProductName", "64Gram Desktop"
+            VALUE "ProductName", "Fincierge Messenger"
             VALUE "ProductVersion", "1.2.10.0"
         END
     END

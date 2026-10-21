@@ -1,9 +1,9 @@
-#define MyAppShortName "64Gram"
-#define MyAppName "64Gram Desktop"
-#define MyAppPublisher "64Gram"
-#define MyAppURL "https://github.com/TDesktop-x64"
+#define MyAppShortName "Fincierge"
+#define MyAppName "Fincierge Messenger"
+#define MyAppPublisher "Fincierge"
+#define MyAppURL "https://github.com/finciergeof/fincierge-messenger"
 #define MyAppExeName "Telegram.exe"
-#define MyAppId "9DB6C981-7FD2-41B5-AEF2-20C933FD3F21"
+#define MyAppId "0A78DD7C-2EF2-4281-B43E-B79E1ED4F507"
 #define CurrentYear GetDateTimeString('yyyy','','')
 
 [Setup]
@@ -37,11 +37,11 @@ WizardStyle=modern
 
 #ifndef MyOutputBaseFilename
   #if MyBuildTarget == "winarm"
-    #define MyOutputBaseFilename "64Gram-arm64." + MyAppVersionFull
+    #define MyOutputBaseFilename "Fincierge-Messenger-arm64." + MyAppVersionFull
   #elif MyBuildTarget == "win64"
-    #define MyOutputBaseFilename "64Gram-x64." + MyAppVersionFull
+    #define MyOutputBaseFilename "Fincierge-Messenger-x64." + MyAppVersionFull
   #else
-    #define MyOutputBaseFilename "64Gram." + MyAppVersionFull
+    #define MyOutputBaseFilename "Fincierge-Messenger." + MyAppVersionFull
   #endif
 #endif
 OutputBaseFilename={#MyOutputBaseFilename}
@@ -78,7 +78,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "{#ReleasePath}\Telegram.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#ReleasePath}\Updater.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#ReleasePath}\Updater.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 #if MyBuildTarget != "winarm"
 Source: "{#ReleasePath}\{#ModulesFolder}\d3d\d3dcompiler_47.dll"; DestDir: "{app}\{#ModulesFolder}\d3d"; Flags: ignoreversion
 #endif
