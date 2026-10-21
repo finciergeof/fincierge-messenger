@@ -109,6 +109,30 @@ inline constexpr StringEntry kStrings[] = {
 		"Your note",
 		"Ваша заметка",
 		"Ваша нотатка" },
+
+	// Templates.
+	{ "section_messages",
+		"Messages",
+		"Сообщения",
+		"Повідомлення" },
+	{ "templates_title",
+		"Quick reply templates",
+		"Шаблоны ответов",
+		"Шаблони відповідей" },
+	{ "templates_placeholder",
+		"One template per line",
+		"Один шаблон на строку",
+		"Один шаблон на рядок" },
+	{ "messages_about",
+		"Templates appear when you right-click the message field. "
+		"\"Remind me...\" is in the message menu, chat notes are in the "
+		"chat menu in the chat list.",
+		"Шаблоны появляются по правому клику в поле ввода. "
+		"«Напомнить...» — в меню сообщения, заметки — в меню чата "
+		"в списке чатов.",
+		"Шаблони з'являються за правим кліком у полі введення. "
+		"«Нагадати...» — у меню повідомлення, нотатки — у меню чату "
+		"в списку чатів." },
 };
 
 } // namespace Fincierge

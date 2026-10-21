@@ -135,4 +135,59 @@ void EditChatNote(
 	}));
 }
 
+QStringList Templates() {
+	auto result = QStringList();
+	const auto lines = StringOption(u"templates"_q).split('\n');
+	for (const auto &line : lines) {
+		const auto trimmed = line.trimmed();
+		if (!trimmed.isEmpty()) {
+			result.push_back(trimmed);
+		}
+	}
+	return result;
+}
+
+void AddTemplatesMenu(not_null<Ui::InputField*> field) {
+	const auto weak = QPointer<Ui::InputField>(field.get());
+	field->addContextMenuHook([=](Ui::InputField::ContextMenuRequest request) {
+		const auto list = Templates();
+		if (list.isEmpty()) {
+			return;
+		}
+		request.customizePopupMenu([=](not_null<Ui::PopupMenu*> menu) {
+			menu->addSeparator();
+			for (const auto &text : list) {
+				const auto label = (text.size() > 40)
+					? (text.left(40) + QString::fromUtf8("\xE2\x80\xA6"))
+					: text;
+				menu->addAction(label, [=] {
+					if (const auto strong = weak.data()) {
+						strong->rawTextEdit()->insertPlainText(text);
+						strong->setFocus();
+					}
+				}, &st::menuIconEdit);
+			}
+		});
+	});
+}
+
+void EditTemplates(not_null<Window::SessionController*> controller) {
+	controller->show(Box([=](not_null<Ui::GenericBox*> box) {
+		box->setTitle(TrValue("templates_title"));
+		const auto field = box->addRow(object_ptr<Ui::InputField>(
+			box,
+			st::defaultInputField,
+			Ui::InputField::Mode::MultiLine,
+			TrValue("templates_placeholder"),
+			Templates().join('\n')));
+		const auto save = [=] {
+			SetStringOption(u"templates"_q, field->getLastText());
+			box->closeBox();
+		};
+		box->addButton(tr::lng_settings_save(), save);
+		box->addButton(tr::lng_cancel(), [=] { box->closeBox(); });
+		box->setFocusCallback([=] { field->setFocusFast(); });
+	}));
+}
+
 } // namespace Fincierge

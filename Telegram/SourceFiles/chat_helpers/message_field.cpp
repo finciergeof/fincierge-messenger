@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "chat_helpers/message_field.h"
+#include "fincierge/fincierge_actions.h"
 
 #include "history/history_widget.h"
 #include "history/history.h" // History::session
@@ -614,6 +615,7 @@ auto InitMessageFieldHandlers(MessageFieldHandlersArgs &&args)
 		field->setEditLanguageCallback(DefaultEditLanguageCallback(show));
 		InitSpellchecker(show, field, args.fieldStyle != nullptr);
 	}
+	Fincierge::AddTemplatesMenu(field);
 	const auto style = std::make_shared<Ui::ChatStyle>(
 		session->colorIndicesValue());
 	field->setPreCache([=] {

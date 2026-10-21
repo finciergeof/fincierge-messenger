@@ -12,6 +12,7 @@ class PeerData;
 
 namespace Ui {
 class PopupMenu;
+class InputField;
 } // namespace Ui
 
 namespace Window {
@@ -34,5 +35,10 @@ void SetChatNote(not_null<PeerData*> peer, const QString &note);
 void EditChatNote(
 	not_null<Window::SessionController*> controller,
 	not_null<PeerData*> peer);
+
+// Quick reply templates: right click in the message field.
+[[nodiscard]] QStringList Templates();
+void AddTemplatesMenu(not_null<Ui::InputField*> field);
+void EditTemplates(not_null<Window::SessionController*> controller);
 
 } // namespace Fincierge

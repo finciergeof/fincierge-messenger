@@ -8,6 +8,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "fincierge/fincierge_settings.h"
 
 #include "fincierge/fincierge.h"
+#include "fincierge/fincierge_actions.h"
 #include "settings/settings_common.h"
 #include "ui/vertical_list.h"
 #include "ui/wrap/vertical_layout.h"
@@ -49,6 +50,18 @@ void SetupSettings(
 	AddToggle(container, "ghost_stories", u"ghost_stories"_q);
 	Ui::AddSkip(container);
 	Ui::AddDividerText(container, TrValue("ghost_about"));
+
+	Ui::AddSkip(container);
+	Ui::AddSubsectionTitle(container, TrValue("section_messages"));
+	Settings::AddButtonWithIcon(
+		container,
+		TrValue("templates_title"),
+		st::settingsButtonNoIcon
+	)->addClickHandler([=] {
+		EditTemplates(controller);
+	});
+	Ui::AddSkip(container);
+	Ui::AddDividerText(container, TrValue("messages_about"));
 }
 
 } // namespace Fincierge
