@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "settings/sections/settings_chat.h"
+#include "fincierge/fincierge_theme.h"
 
 #include "settings/settings_common_session.h"
 
@@ -287,7 +288,7 @@ void ColorsPalette::show(Type type) {
 	const auto current = (settings.systemAccentColorEnabled()
 		? Window::Theme::SystemAccentColor()
 		: std::optional<QColor>()).value_or(
-			color.value_or(scheme->accentColor));
+			color.value_or(Fincierge::DefaultAccent(type)));
 	const auto i = ranges::find(list, current);
 	if (i == end(list)) {
 		list.back() = current;

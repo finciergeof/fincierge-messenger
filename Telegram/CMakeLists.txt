@@ -1867,6 +1867,8 @@ PRIVATE
     fincierge/fincierge_settings.cpp
     fincierge/fincierge_settings.h
     fincierge/fincierge_strings.h
+    fincierge/fincierge_theme.cpp
+    fincierge/fincierge_theme.h
     settings/settings_enhanced.cpp
     settings/settings_enhanced.h
     settings/settings_experimental.cpp
