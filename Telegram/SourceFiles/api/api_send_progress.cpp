@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "api/api_send_progress.h"
+#include "fincierge/fincierge.h"
 
 #include "main/main_session.h"
 #include "history/history.h"
@@ -152,6 +153,9 @@ void SendProgressManager::send(const Key &key, int progress) {
 }
 
 bool SendProgressManager::skipRequest(const Key &key) const {
+	if (Fincierge::GhostTyping() && key.type != SendProgressType::Speaking) {
+		return true;
+	}
 	const auto user = key.history->peer->asUser();
 	if (!user) {
 		return false;

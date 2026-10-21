@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "api/api_updates.h"
+#include "fincierge/fincierge.h"
 
 #include "api/api_authorizations.h"
 #include "api/api_user_names.h"
@@ -1012,6 +1013,9 @@ void Updates::updateOnline(crl::time lastNonIdleTime, bool gotOtherOffline) {
 				int(config.offlineIdleTimeout - idle));
 			Assert(updateIn >= 0);
 		}
+	}
+	if (Fincierge::GhostOnline()) {
+		isOnline = false;
 	}
 	auto ms = crl::now();
 	if (isOnline != _lastWasOnline

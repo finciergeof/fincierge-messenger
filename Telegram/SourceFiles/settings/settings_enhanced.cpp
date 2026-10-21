@@ -10,6 +10,8 @@ https://github.com/TDesktop-x64/tdesktop/blob/dev/LEGAL
 #include <QJsonArray>
 #include <QJsonDocument>
 #include "settings/settings_enhanced.h"
+#include "fincierge/fincierge.h"
+#include "fincierge/fincierge_settings.h"
 
 #include "settings/settings_common.h"
 #include <ui/vertical_list.h>
@@ -575,8 +577,14 @@ namespace Settings {
 		AddSkip(container);
 	}
 
+	void Enhanced::SetupFincierge(
+			not_null<Window::SessionController *> controller,
+			not_null<Ui::VerticalLayout *> container) {
+		Fincierge::SetupSettings(controller, container);
+	}
+
 	rpl::producer<QString> Enhanced::title() {
-		return tr::lng_settings_enhanced();
+		return Fincierge::TrValue("settings_title");
 	}
 
 	Enhanced::Enhanced(
@@ -589,6 +597,7 @@ namespace Settings {
 	void Enhanced::setupContent(not_null<Window::SessionController *> controller) {
 		const auto content = Ui::CreateChild<Ui::VerticalLayout>(this);
 
+		SetupFincierge(controller, content);
 		SetupEnhancedNetwork(content);
 		SetupEnhancedMessages(content);
 		SetupEnhancedButton(content);

@@ -1862,6 +1862,11 @@ PRIVATE
     settings/sections/settings_credits.h
     settings/settings_credits_graphics.cpp
     settings/settings_credits_graphics.h
+    fincierge/fincierge.cpp
+    fincierge/fincierge.h
+    fincierge/fincierge_settings.cpp
+    fincierge/fincierge_settings.h
+    fincierge/fincierge_strings.h
     settings/settings_enhanced.cpp
     settings/settings_enhanced.h
     settings/settings_experimental.cpp

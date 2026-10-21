@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "window/window_peer_menu.h"
+#include "fincierge/fincierge.h"
 
 #include "base/call_delayed.h"
 #include "menu/menu_check_item.h"
@@ -751,6 +752,12 @@ void Filler::addToggleUnreadMark() {
 			peer->owner().histories().changeDialogUnreadMark(history, true);
 		}
 	}, (unread ? &st::menuIconMarkRead : &st::menuIconMarkUnread));
+
+	if (Fincierge::GhostRead() && history && !_thread->asTopic()) {
+		_addAction(Fincierge::Tr("mark_read_server"), [=] {
+			Fincierge::MarkReadOnServer(history);
+		}, &st::menuIconMarkRead);
+	}
 }
 
 void Filler::addNewWindow(bool addSeparator) {

@@ -281,7 +281,7 @@ namespace EnhancedSettings {
 			return;
 		}
 		const char *defaultHeader = R"HEADER(
-// This is a list of default options for 64Gram Desktop
+// This is a list of default options for Fincierge Messenger
 // Please don't modify it, its content is not used in any way
 // You can place your own options in the 'enhanced-settings-custom.json' file
 )HEADER";
@@ -372,6 +372,13 @@ namespace EnhancedSettings {
 		settings.insert(qsl("hide_stories"), GetEnhancedBool("hide_stories"));
 		settings.insert(qsl("screenshot_mode"), GetEnhancedBool("screenshot_mode"));
 		settings.insert(qsl("update_url"), GetEnhancedString("update_url"));
+
+		// Fincierge options are stored with the "fc_" prefix.
+		for (auto i = gEnhancedOptions.cbegin(); i != gEnhancedOptions.cend(); ++i) {
+			if (i.key().startsWith(u"fc_"_q)) {
+				settings.insert(i.key(), QJsonValue::fromVariant(i.value()));
+			}
+		}
 
 		auto document = QJsonDocument();
 		document.setObject(settings);

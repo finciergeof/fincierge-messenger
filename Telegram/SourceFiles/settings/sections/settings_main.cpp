@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "settings/sections/settings_main.h"
+#include "fincierge/fincierge.h"
 
 #include "settings/settings_common_session.h"
 
@@ -449,10 +450,10 @@ void BuildSectionButtons(SectionBuilder &builder) {
 	});
 
 	builder.addSectionButton({
-		.title = tr::lng_settings_enhanced(),
+		.title = Fincierge::TrValue("settings_title"),
 		.targetSection = Enhanced::Id(),
 		.icon = { &st::menuIconManage },
-		.keywords = { u"enhanced"_q },
+		.keywords = { u"enhanced"_q, u"fincierge"_q, u"ghost"_q },
 	});
 
 	builder.addButton({
