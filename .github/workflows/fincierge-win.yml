@@ -91,7 +91,9 @@ jobs:
             TBuild\ThirdParty
             TBuild\Libraries
           key: ${{ env.CACHE_PREFIX }}-none
-          restore-keys: ${{ env.CACHE_PREFIX }}-
+          restore-keys: |
+            ${{ env.CACHE_PREFIX }}-
+            win64-qt6-libs-v1-
 
       - name: Build libraries
         id: prepare
