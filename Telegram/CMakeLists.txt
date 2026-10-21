@@ -1864,6 +1864,8 @@ PRIVATE
     settings/settings_credits_graphics.h
     fincierge/fincierge.cpp
     fincierge/fincierge.h
+    fincierge/fincierge_actions.cpp
+    fincierge/fincierge_actions.h
     fincierge/fincierge_settings.cpp
     fincierge/fincierge_settings.h
     fincierge/fincierge_strings.h

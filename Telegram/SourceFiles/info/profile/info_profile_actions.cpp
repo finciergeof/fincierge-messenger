@@ -6,6 +6,8 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "info/profile/info_profile_actions.h"
+#include "fincierge/fincierge.h"
+#include "fincierge/fincierge_actions.h"
 
 #include "api/api_blocked_peers.h"
 #include "api/api_chat_participants.h"
@@ -1720,6 +1722,9 @@ Section DetailsFiller::makeInfo() {
 			AboutWithAdvancedValue(user));
 		setupAboutContextMenu(about.text, AboutWithAdvancedValue(user));
 		SetupAboutPeerIdDrag(about.text, user);
+		addInfoLine(
+			Fincierge::TrValue("note_label"),
+			Fincierge::ChatNoteValue(user));
 
 		const auto usernameLine = addInfoOneLine(
 			UsernamesSubtext(_peer, tr::lng_info_username_label()),
@@ -1895,6 +1900,9 @@ Section DetailsFiller::makeInfo() {
 		if (!_topic) {
 			setupAboutContextMenu(about.text, AboutWithAdvancedValue(_peer));
 			SetupAboutPeerIdDrag(about.text, _peer);
+			addInfoLine(
+				Fincierge::TrValue("note_label"),
+				Fincierge::ChatNoteValue(_peer));
 		}
 	}
 	raw->toggleOn(tracker.atLeastOneShownValue());
