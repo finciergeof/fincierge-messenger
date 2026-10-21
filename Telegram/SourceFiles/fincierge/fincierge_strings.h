@@ -146,6 +146,94 @@ inline constexpr StringEntry kStrings[] = {
 		"deleted",
 		"удалено",
 		"видалено" },
+
+	// Chat lock.
+	{ "section_lock",
+		"Locked chats",
+		"Чаты под кодом",
+		"Чати під кодом" },
+	{ "lock_add",
+		"Lock with code",
+		"Закрыть кодом",
+		"Закрити кодом" },
+	{ "lock_remove",
+		"Remove code",
+		"Убрать код",
+		"Прибрати код" },
+	{ "lock_added",
+		"The chat is locked with your code.",
+		"Чат закрыт кодом.",
+		"Чат закрито кодом." },
+	{ "lock_removed",
+		"The code is removed from this chat.",
+		"Код с чата снят.",
+		"Код з чату знято." },
+	{ "lock_preview",
+		"Locked chat",
+		"Чат под кодом",
+		"Чат під кодом" },
+	{ "lock_enter_title",
+		"Enter the code",
+		"Введите код",
+		"Введіть код" },
+	{ "lock_enter_about",
+		"This chat is protected with your code.",
+		"Этот чат защищён вашим кодом.",
+		"Цей чат захищено вашим кодом." },
+	{ "lock_remove_title",
+		"Remove the code",
+		"Убрать код",
+		"Прибрати код" },
+	{ "lock_create_title",
+		"Create a code",
+		"Придумайте код",
+		"Придумайте код" },
+	{ "lock_create_about",
+		"It will be asked when you open locked chats on this device. "
+		"Telegram doesn't know it and can't restore it.",
+		"Его будут спрашивать при открытии закрытых чатов на этом "
+		"устройстве. Telegram его не знает и восстановить не сможет.",
+		"Його питатимуть під час відкриття закритих чатів на цьому "
+		"пристрої. Telegram його не знає і не зможе відновити." },
+	{ "lock_change_title",
+		"Current code",
+		"Текущий код",
+		"Поточний код" },
+	{ "lock_change_code",
+		"Code for locked chats",
+		"Код для закрытых чатов",
+		"Код для закритих чатів" },
+	{ "lock_code_placeholder",
+		"Code",
+		"Код",
+		"Код" },
+	{ "lock_code_repeat",
+		"Repeat the code",
+		"Повторите код",
+		"Повторіть код" },
+	{ "lock_confirm",
+		"OK",
+		"Готово",
+		"Готово" },
+	{ "lock_code_saved",
+		"The code is saved.",
+		"Код сохранён.",
+		"Код збережено." },
+	{ "lock_settings_about",
+		"Lock a chat from its menu in the chat list. The code is asked "
+		"when the chat is opened (then the chat stays open for 10 "
+		"minutes), its messages are hidden in the chat list and in "
+		"notifications. This protects from people at your computer, "
+		"the chat itself stays a normal Telegram chat.",
+		"Закрыть чат можно в его меню в списке чатов. Код спрашивается "
+		"при открытии (потом чат открыт 10 минут), сообщения скрыты в "
+		"списке чатов и в уведомлениях. Это защита от тех, кто сядет за "
+		"ваш компьютер, сам чат остаётся обычным чатом Telegram.",
+		"Закрити чат можна в його меню в списку чатів. Код питається під "
+		"час відкриття (потім чат відкритий 10 хвилин), повідомлення "
+		"приховані в списку чатів і в сповіщеннях. Це захист від тих, хто "
+		"сяде за ваш комп'ютер, сам чат залишається звичайним чатом "
+		"Telegram." },
 };
 
 } // namespace Fincierge

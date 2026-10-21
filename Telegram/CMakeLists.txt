@@ -1866,6 +1866,8 @@ PRIVATE
     fincierge/fincierge.h
     fincierge/fincierge_actions.cpp
     fincierge/fincierge_actions.h
+    fincierge/fincierge_lock.cpp
+    fincierge/fincierge_lock.h
     fincierge/fincierge_settings.cpp
     fincierge/fincierge_settings.h
     fincierge/fincierge_strings.h

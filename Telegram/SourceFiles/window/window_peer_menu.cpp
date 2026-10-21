@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "window/window_peer_menu.h"
+#include "fincierge/fincierge_lock.h"
 #include "fincierge/fincierge_actions.h"
 #include "fincierge/fincierge.h"
 
@@ -762,6 +763,15 @@ void Filler::addToggleUnreadMark() {
 			: "note_edit"), [=] {
 			Fincierge::EditChatNote(noteController, notePeer);
 		}, &st::menuIconEdit);
+	}
+	if (history && !_thread->asTopic() && !history->peer->isSelf()) {
+		const auto lockPeer = history->peer;
+		const auto lockController = _controller;
+		_addAction(Fincierge::Tr(Fincierge::IsChatLocked(lockPeer)
+			? "lock_remove"
+			: "lock_add"), [=] {
+			Fincierge::ToggleChatLock(lockController, lockPeer);
+		}, &st::menuIconLock);
 	}
 	if (Fincierge::GhostRead() && history && !_thread->asTopic()) {
 		_addAction(Fincierge::Tr("mark_read_server"), [=] {

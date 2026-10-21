@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "window/notifications_manager.h"
+#include "fincierge/fincierge_lock.h"
 
 #include "base/options.h"
 #include "base/platform/base_platform_info.h"
@@ -1095,7 +1096,8 @@ Manager::DisplayOptions Manager::getNotificationOptions(
 	result.hideNameAndPhoto = hideEverything
 		|| (view > Core::Settings::NotifyView::ShowName);
 	result.hideMessageText = hideEverything
-		|| (view > Core::Settings::NotifyView::ShowPreview);
+		|| (view > Core::Settings::NotifyView::ShowPreview)
+		|| (peer && Fincierge::IsChatLocked(peer));
 	result.hideMarkAsRead = result.hideMessageText
 		|| (type != Data::ItemNotificationType::Message)
 		|| !item

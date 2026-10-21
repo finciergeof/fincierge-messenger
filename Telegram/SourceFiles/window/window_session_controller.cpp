@@ -6,6 +6,7 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "window/window_session_controller.h"
+#include "fincierge/fincierge_lock.h"
 
 #include "apiwrap.h"
 #include "api/api_cloud_password.h"
@@ -3179,6 +3180,11 @@ void SessionController::showPeerHistory(
 		PeerId peerId,
 		const SectionShow &params,
 		MsgId msgId) {
+	if (!Fincierge::CheckChatUnlocked(this, peerId, [=] {
+		showPeerHistory(peerId, params, msgId);
+	})) {
+		return;
+	}
 	if (const auto peer = session().data().peerLoaded(peerId)) {
 		if (const auto channel = peer->asChannel()) {
 			if (channel->isCommunity()) {

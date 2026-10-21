@@ -6,6 +6,8 @@ For license and copyright information please follow this link:
 https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 */
 #include "dialogs/ui/dialogs_message_view.h"
+#include "fincierge/fincierge_lock.h"
+#include "fincierge/fincierge.h"
 
 #include "history/history.h"
 #include "history/history_item.h"
@@ -184,6 +186,10 @@ void MessageView::prepare(
 	options.ignoreTopic = true;
 	options.spoilerLoginCode = true;
 	auto preview = item->toPreview(options);
+	if (Fincierge::IsChatLocked(item->history()->peer)) {
+		preview = ItemPreview();
+		preview.text = TextWithEntities{ Fincierge::Tr("lock_preview") };
+	}
 	_leftIcon = (preview.icon == ItemPreview::Icon::ForwardedMessage)
 		? &st::dialogsMiniForward
 		: (preview.icon == ItemPreview::Icon::ReplyToStory)

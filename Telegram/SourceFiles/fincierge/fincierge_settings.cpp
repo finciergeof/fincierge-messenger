@@ -9,6 +9,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 
 #include "fincierge/fincierge.h"
 #include "fincierge/fincierge_actions.h"
+#include "fincierge/fincierge_lock.h"
 #include "settings/settings_common.h"
 #include "ui/vertical_list.h"
 #include "ui/wrap/vertical_layout.h"
@@ -50,6 +51,18 @@ void SetupSettings(
 	AddToggle(container, "ghost_stories", u"ghost_stories"_q);
 	Ui::AddSkip(container);
 	Ui::AddDividerText(container, TrValue("ghost_about"));
+
+	Ui::AddSkip(container);
+	Ui::AddSubsectionTitle(container, TrValue("section_lock"));
+	Settings::AddButtonWithIcon(
+		container,
+		TrValue("lock_change_code"),
+		st::settingsButtonNoIcon
+	)->addClickHandler([=] {
+		ChangeChatLockCode(controller);
+	});
+	Ui::AddSkip(container);
+	Ui::AddDividerText(container, TrValue("lock_settings_about"));
 
 	Ui::AddSkip(container);
 	Ui::AddSubsectionTitle(container, TrValue("section_messages"));
