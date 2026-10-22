@@ -240,13 +240,20 @@ jobs:
         continue-on-error: true
         shell: bash
         run: |
-          tail -n 200 build.log || true
+          set +e +o pipefail
+          tail -n 200 build.log
           if [ "${{ steps.build.outcome }}" != "success" ]; then
-            ERR=$(grep -E "error [A-Z]+[0-9]+|: error|fatal error|FAILED" build.log | sort -u | head -n 80)
-            [ -z "$ERR" ] && ERR=$(tail -n 60 build.log)
-            MSG=$(echo "$ERR" | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\r//g;s/\n/%0A/g')
-            echo "::error title=Build errors::$MSG"
+            grep -E "error [A-Z]+[0-9]+|: error|fatal error" build.log > errors.txt
+            sort -u errors.txt > errors_u.txt
+            head -n 60 errors_u.txt > errors_top.txt
+            [ -s errors_top.txt ] || tail -n 60 build.log > errors_top.txt
+            split -l 6 errors_top.txt part_
+            for f in part_*; do
+              MSG=$(sed 's/%/%25/g' "$f" | tr -d '\r' | awk 'BEGIN{ORS="%0A"}{print}')
+              echo "::error title=Build errors::$MSG"
+            done
           fi
+          exit 0
 
       - name: Installer
         shell: pwsh
